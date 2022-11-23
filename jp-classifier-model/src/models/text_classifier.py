@@ -1,5 +1,4 @@
 from typing import Dict
-from overrides import overrides
 
 import torch
 
@@ -29,7 +28,6 @@ class TextClassifier(Model):
         self._loss = torch.nn.CrossEntropyLoss()
         self._accuracy = CategoricalAccuracy()
 
-    @overrides
     def forward(self,
                 sentence: Dict[str, torch.Tensor],
                 label: torch.IntTensor = None) -> Dict[str, torch.Tensor]:
@@ -47,7 +45,6 @@ class TextClassifier(Model):
 
         return output
 
-    @overrides
     def get_metrics(self,
                     reset: bool = False) -> Dict[str, float]:
         return {"accuracy": self._accuracy.get_metric(reset)}

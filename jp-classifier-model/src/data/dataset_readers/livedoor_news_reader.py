@@ -1,5 +1,4 @@
-from typing import Dict, List, Iterator
-from overrides import overrides
+from typing import Dict, List, Iterable
 
 import os
 
@@ -14,11 +13,10 @@ class LivedoorNewsReader(DatasetReader):
     def __init__(self,
                  tokenizer: Tokenizer,
                  token_indexers: Dict[str, TokenIndexer] = None) -> None:
-        super().__init__(lazy=False)
+        super().__init__()
         self.tokenizer = tokenizer
         self.token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
 
-    @overrides
     def text_to_instance(self, 
                          tokens: List[Token],
                          label: str = None) -> Instance:
@@ -31,8 +29,7 @@ class LivedoorNewsReader(DatasetReader):
 
         return Instance(fields)
 
-    @overrides
-    def _read(self, path: str) -> Iterator[Instance]:
+    def _read(self, path: str) -> Iterable[Instance]:
         dirs_path = os.listdir(path)
         category_dirs = [f for f in dirs_path if os.path.isdir(os.path.join(path, f))]
         for category_dir in category_dirs:

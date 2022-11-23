@@ -22,10 +22,12 @@ local learning_rate = 0.1;
     model: {
         type: 'text_classifier',
         word_embeddings: {
-            tokens: {
-                type: 'embedding',
-                embedding_dim: embedding_dim,
-                trainable: true
+            token_embedders: {
+                tokens: {
+                    type: 'embedding',
+                    embedding_dim: embedding_dim,
+                    trainable: true
+                }
             }
         },
         encoder: {
@@ -35,10 +37,13 @@ local learning_rate = 0.1;
             output_dim: output_dim
         }
     },
-    iterator: {
-        type: 'bucket',
-        batch_size: batch_size,
-        sorting_keys: [['sentence', 'num_tokens']]
+    data_loader: {
+        batch_sampler: {
+            type: "bucket",
+            batch_size: batch_size,
+            sorting_keys: ['sentence'],
+            // sorting_keys: [['sentence', 'num_tokens']],
+        }
     },
     trainer: {
         num_epochs: num_epochs,
