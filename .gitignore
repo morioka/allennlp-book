@@ -8,3 +8,4 @@ __pycache__
 !*/datasets/download.sh
 */tmp
 pretrain_bert/
+*/output.json
