@@ -1,5 +1,4 @@
 from typing import Dict
-from overrides import overrides
 
 import torch
 
@@ -29,7 +28,6 @@ class NERTagger(Model):
 
         self._f1_metric = SpanBasedF1Measure(vocab, 'labels')
 
-    @overrides
     def forward(self,
                 sentence: Dict[str, torch.Tensor],
                 labels: torch.Tensor = None) -> Dict[str, torch.Tensor]:
@@ -48,7 +46,6 @@ class NERTagger(Model):
 
         return output
 
-    @overrides
     def get_metrics(self,
                     reset: bool = False) -> Dict[str, float]:
         return self._f1_metric.get_metric(reset=reset)

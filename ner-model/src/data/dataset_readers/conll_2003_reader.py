@@ -1,5 +1,4 @@
-from typing import Dict, List, Iterator
-from overrides import overrides
+from typing import Dict, List, Iterable
 
 from allennlp.data import Instance
 from allennlp.data.tokenizers import Token
@@ -10,10 +9,9 @@ from allennlp.data.fields import TextField, SequenceLabelField
 @DatasetReader.register("conll_2003_reader")
 class Conll2003Reader(DatasetReader):
     def __init__(self, token_indexers: Dict[str, TokenIndexer] = None) -> None:
-        super().__init__(lazy=False)
+        super().__init__()
         self.token_indexers = token_indexers or {"tokens": SingleIdTokenIndexer()}
 
-    @overrides
     def text_to_instance(self, 
                          tokens: List[Token],
                          tags: List[str] = None) -> Instance:
@@ -27,8 +25,7 @@ class Conll2003Reader(DatasetReader):
 
         return Instance(fields)
 
-    @overrides
-    def _read(self, file_path: str) -> Iterator[Instance]:
+    def _read(self, file_path: str) -> Iterable[Instance]:
         with open(file_path) as f:
             sentence, tags = [], []
             for line in f:

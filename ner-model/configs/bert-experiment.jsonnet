@@ -10,9 +10,10 @@ local bert_path = "./pretrain_bert";
         type: "conll_2003_reader",
         token_indexers: {
             bert: {
-                type: "bert-pretrained",
-                pretrained_model: bert_path,
-                do_lowercase: false
+                type: "pretrained_transformer",
+                //pretrained_model: bert_path,
+                //do_lowercase: false,
+                model_name: bert_path,
             },
         },
     },
@@ -21,10 +22,13 @@ local bert_path = "./pretrain_bert";
     model: {
         type: "ner_tagger",
         word_embeddings: {
-            allow_unmatched_keys: true,
-            bert: {
-                type: "bert-pretrained",
-                pretrained_model: bert_path,
+            token_embedders: {
+                //allow_unmatched_keys: true,
+                bert: {
+                    type: "pretrained_transformer",
+                    //pretrained_model: bert_path,
+                    model_name: bert_path,
+                }
             }
         },
         encoder: {
@@ -33,10 +37,13 @@ local bert_path = "./pretrain_bert";
             hidden_size: hidden_dim
         }
     },
-    iterator: {
-        type: "bucket",
-        batch_size: batch_size,
-        sorting_keys: [["sentence", "num_tokens"]]
+    data_loader: {
+        batch_sampler: {
+            type: "bucket",
+            batch_size: batch_size,
+            sorting_keys: ['sentence'],
+            // sorting_keys: [['sentence', 'num_tokens']],
+        }
     },
     trainer: {
         num_epochs: num_epochs,
