@@ -19,22 +19,28 @@ local dataset_reader = {
     "tokens": {
       "namespace": "target_tokens"
     }
-  }
+  },
+  "source_add_start_token": false,
+  "source_add_end_token": false,
 };
 
 {
   "dataset_reader": dataset_reader,
   "train_data_path": train_data_path,
   "validation_data_path": validation_data_path,
-  "iterator": {
-    "type": "bucket",
-    "batch_size" : 100,
-    "sorting_keys": [["source_tokens", "num_tokens"]]
+  "data_loader": {
+    "batch_sampler": {
+      "type": "bucket",
+      "batch_size": 100,
+      "sorting_keys": ["source_tokens"]
+      //"sorting_keys": [["source_tokens", "num_tokens"]]
+    }
   },
   "trainer": {
     "num_epochs": 100,
     "patience": 10,
-    "cuda_device": 0,
+    //"cuda_device": 0,
+    "cuda_device": -1,
     "optimizer": {
       "type": "adam",
       "lr": 0.01

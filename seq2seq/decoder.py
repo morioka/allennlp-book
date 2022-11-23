@@ -12,16 +12,16 @@ from copy import deepcopy
 
 from allennlp.common.checks import ConfigurationError
 from allennlp.common.util import END_SYMBOL, START_SYMBOL
-from allennlp.modules.seq2seq_decoders.seq_decoder import SeqDecoder
+from allennlp_models.generation.modules.seq_decoders.seq_decoder import SeqDecoder
 from allennlp.data import Vocabulary
 from allennlp.modules import Embedding
-from allennlp.modules.seq2seq_decoders.decoder_net import DecoderNet
+from allennlp_models.generation.modules.decoder_nets.decoder_net import DecoderNet
 from allennlp.nn import util
 from allennlp.nn.beam_search import BeamSearch
 from allennlp.training.metrics import Metric
 
 
-@SeqDecoder.register("auto_regressive_seq_decoder", exist_ok=True)
+#@SeqDecoder.register("auto_regressive_seq_decoder", exist_ok=True)
 class AutoRegressiveSeqDecoder(SeqDecoder):
     """
     An autoregressive decoder that can be used for most seq2seq tasks.
@@ -386,7 +386,7 @@ class AutoRegressiveSeqDecoder(SeqDecoder):
 
         return class_log_probabilities, state
 
-    @overrides
+    #@overrides
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
         all_metrics: Dict[str, float] = {}
         if not self.training:
@@ -398,7 +398,7 @@ class AutoRegressiveSeqDecoder(SeqDecoder):
                 all_metrics.update(self._token_based_metric.get_metric(reset=reset))  # type: ignore
         return all_metrics
 
-    @overrides
+    #@overrides
     def forward(
         self,
         encoder_out: Dict[str, torch.LongTensor],
@@ -439,7 +439,7 @@ class AutoRegressiveSeqDecoder(SeqDecoder):
 
         return output_dict
 
-    @overrides
+    #@overrides
     def post_process(self, output_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
         """
         This method trims the output predictions to the first end symbol, replaces indices with
