@@ -202,10 +202,10 @@ class StochasticAnswerNetworks(Model):
                 torch.rand((batch_size, self._answer_steps)) > self._dropout.p
             ).to(label_prob_steps.device)
             label_probs = util.masked_mean(
-                label_prob_steps, binary_mask.float().unsqueeze(1), dim=2
+                label_prob_steps, binary_mask.bool().unsqueeze(1), dim=2
             )
             label_probs = util.replace_masked_values(
-                label_probs, binary_mask.sum(1, keepdim=True).bool().float(), 1.0 / num_labels
+                label_probs, binary_mask.sum(1, keepdim=True).bool(), 1.0 / num_labels
             )
         else:
             label_probs = label_prob_steps.mean(2)

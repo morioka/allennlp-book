@@ -17,7 +17,8 @@ local num_directions = if bidirectional then 2 else 1;
             }
         }
     },
-    "train_data_path": "https://allennlp.s3.amazonaws.com/datasets/snli/snli_1.0_train.jsonl",
+    //"train_data_path": "https://allennlp.s3.amazonaws.com/datasets/snli/snli_1.0_train.jsonl",
+    "train_data_path": "https://allennlp.s3.amazonaws.com/datasets/snli/snli_1.0_dev.jsonl",
     "validation_data_path": "https://allennlp.s3.amazonaws.com/datasets/snli/snli_1.0_dev.jsonl",
     "model": {
         "type": "san",
@@ -75,20 +76,26 @@ local num_directions = if bidirectional then 2 else 1;
             "hidden_dims": 3,
             "activations": "linear"
         },
-        "initializer": [
-            [".*linear_layers.*weight", {"type": "xavier_uniform"}],
-            [".*linear_layers.*bias", {"type": "zero"}],
-            [".*weight_ih.*", {"type": "xavier_uniform"}],
-            [".*weight_hh.*", {"type": "orthogonal"}],
-            [".*bias_ih.*", {"type": "zero"}],
-            [".*bias_hh.*", {"type": "lstm_hidden_bias"}]
-        ]
+        "initializer": {
+            "regexes": [
+                [".*linear_layers.*weight", {"type": "xavier_uniform"}],
+                [".*linear_layers.*bias", {"type": "zero"}],
+                [".*weight_ih.*", {"type": "xavier_uniform"}],
+                [".*weight_hh.*", {"type": "orthogonal"}],
+                [".*bias_ih.*", {"type": "zero"}],
+                [".*bias_hh.*", {"type": "lstm_hidden_bias"}]
+            ]
+            //"prevent_regexes": None
+        }
     },
-    "iterator": {
-        "type": "bucket",
-        "sorting_keys": [["premise", "num_tokens"],
-                         ["hypothesis", "num_tokens"]],
-        "batch_size": 32
+    "data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 32,
+            "sorting_keys": ["premise", "hypothesis"],
+            //"sorting_keys": [["premise", "num_tokens"],
+            //                 ["hypothesis", "num_tokens"]],
+        }
     },
     "trainer": {
         "optimizer": {
@@ -100,7 +107,8 @@ local num_directions = if bidirectional then 2 else 1;
         "num_epochs": 75,
         "grad_norm": 10.0,
         "patience": 5,
-        "cuda_device": 0,
+        //"cuda_device": 0,
+        "cuda_device": -1,
         "learning_rate_scheduler": {
             "type": "reduce_on_plateau",
             "factor": 0.5,
