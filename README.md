@@ -36,6 +36,7 @@ awscli==1.25.77
 boto3==1.24.76
 Janome==0.4.2
 mlflow==1.29.0
+overrides==7.3.1
 pytest==7.1.3
 ```
 
@@ -56,14 +57,14 @@ pytest==7.1.3
 
 ```bash
 pyenv install 3.9.7
-pyenv virtualenv 3.9.7 allennlp-book2
-pyenv shell allennlp-book2
-pip isntall -r requirements.txt
+pyenv virtualenv 3.9.7 allennlp-book
+pyenv shell allennlp-book
+pip install -r requirements.txt
 ```
 
 - 第1章 AllenNLPチュートリアル
 ```bash
-cd ner_model
+cd ner-model
 cd datasets; ./download.sh; cd ..
 
 # 学習
@@ -80,17 +81,22 @@ allennlp predict --output-file output.json \
 - 第2章 文書分類
 ```bash
 cd classifier-model
+cd datasets; ./download.sh; cd ..
+
+# 学習
 allennlp train -f --include-package src -s ./tmp configs/experiment.jsonnet
 ```
 - 第3章 Seq2Seq
 ```bash
 cd seq2seq
-# SimpleSeq2Seq
+python data/dataset.py
+
+# SimpleSeq2Seq 学習と評価
 allennlp train -s tmp configs/simple_seq2seq.jsonnet
 allennlp predict --use-dataset-reader \
                  --predictor seq2seq \
                  tmp/model.tar.gz data/valid.tsv
-# ComposedSeq2Seq
+# ComposedSeq2Seq 学習と評価
 allennlp train --include-package decoder -s tmp configs/composed_seq2seq.jsonnet
 allennlp predict --include-package decoder \
                  --use-dataset-reader \
@@ -100,31 +106,39 @@ allennlp predict --include-package decoder \
 - 第4章 Natural Language Inference
 ```bash
 cd nli
+# データセットは学習時にダウンロードされる
+
+# 学習
 allennlp train -s tmp --include-package src configs/san.jsonnet
 ```
 - 第5章 事前学習済みBERT
 ```bash
-cd ner_model
-ipython
-[1]: from transformers import *
-...: BERT_PATH = "./pretrain_bert"
-...:
-...: # 学習済みBERTのダウンロード
-...: pretrained_weights = "bert-base-cased"
-...: tokenizer = BertTokenizer.from_pretrained(pretrained_weights)
-...: model = BertModel.from_pretrained(pretrained_weights)
-...:
-...: # モデルとトークナイザの保存
-...: tokenizer.save_pretrained(BERT_PATH)
-...: model.save_pretrained(BERT_PATH)
-^Z
+cd ner-model
+python
+>>> from transformers import *
+>>> BERT_PATH = "./pretrain_bert"
+>>> 
+>>> # 学習済みBERTのダウンロード
+>>> pretrained_weights = "bert-base-cased"
+>>> tokenizer = BertTokenizer.from_pretrained(pretrained_weights)
+>>> model = BertModel.from_pretrained(pretrained_weights)
+>>> 
+>>> # モデルとトークナイザの保存
+>>> tokenizer.save_pretrained(BERT_PATH)
+>>> model.save_pretrained(BERT_PATH)
+^D
+
+# 学習
 allennlp train -f --include-package src -s ./tmp configs/bert-experiment.jsonnet
 ```
 - 第6章 AllenNLP で日本語を扱おう
 ```bash
 cd jp-lassifier-model
+cd datasets; ./download.sh; cd ..
+
+# 学習
 allennlp train -f --include-package src -s ./tmp configs/experiment.jsonnet
 ```
 - 第7章 MLflow との連携
 
-※未確認
+※condaを利用していないので未確認
