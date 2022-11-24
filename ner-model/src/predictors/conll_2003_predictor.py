@@ -1,5 +1,3 @@
-from overrides import overrides
-
 import numpy as np
 
 from allennlp.common.util import JsonDict, sanitize
@@ -12,7 +10,6 @@ class CoNLL2003Predictor(Predictor):
     def __init__(self, model:Model, dataset_reader: DatasetReader) -> None:
         super().__init__(model, dataset_reader)
 
-    @overrides
     def predict_instance(self, instance: Instance) -> JsonDict:
         outputs = self._model.forward_on_instance(instance)
 

@@ -2,7 +2,6 @@
 #   https://github.com/allenai/allennlp/pull/3464
 
 from typing import Dict, List, Tuple, Optional
-from overrides import overrides
 
 import numpy
 import torch
@@ -386,7 +385,6 @@ class AutoRegressiveSeqDecoder(SeqDecoder):
 
         return class_log_probabilities, state
 
-    #@overrides
     def get_metrics(self, reset: bool = False) -> Dict[str, float]:
         all_metrics: Dict[str, float] = {}
         if not self.training:
@@ -398,7 +396,6 @@ class AutoRegressiveSeqDecoder(SeqDecoder):
                 all_metrics.update(self._token_based_metric.get_metric(reset=reset))  # type: ignore
         return all_metrics
 
-    #@overrides
     def forward(
         self,
         encoder_out: Dict[str, torch.LongTensor],
@@ -439,7 +436,6 @@ class AutoRegressiveSeqDecoder(SeqDecoder):
 
         return output_dict
 
-    #@overrides
     def post_process(self, output_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
         """
         This method trims the output predictions to the first end symbol, replaces indices with
