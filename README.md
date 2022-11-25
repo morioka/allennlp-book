@@ -84,6 +84,13 @@ cd datasets; ./download.sh; cd ..
 
 # 学習
 allennlp train -f --include-package src -s ./tmp configs/experiment.jsonnet
+# 評価
+allennlp predict --output-file output.json \
+                 --include-package src \
+                 --predictor text_classifier_predictor \
+                 --use-dataset-reader \
+                 --silent \
+                 tmp datasets/test.csv
 ```
 - 第3章 Seq2Seq
 ```bash
@@ -91,12 +98,12 @@ cd seq2seq
 python data/dataset.py
 
 # SimpleSeq2Seq 学習と評価
-allennlp train -s tmp configs/simple_seq2seq.jsonnet
+allennlp train -f -s ./tmp configs/simple_seq2seq.jsonnet
 allennlp predict --use-dataset-reader \
                  --predictor seq2seq \
                  tmp/model.tar.gz data/valid.tsv
 # ComposedSeq2Seq 学習と評価
-allennlp train --include-package decoder -s tmp configs/composed_seq2seq.jsonnet
+allennlp train -f --include-package decoder -s ./tmp configs/composed_seq2seq.jsonnet
 allennlp predict --include-package decoder \
                  --use-dataset-reader \
                  --predictor seq2seq \
@@ -108,7 +115,9 @@ cd nli
 # データセットは学習時にダウンロードされる
 
 # 学習
-allennlp train -s tmp --include-package src configs/san.jsonnet
+allennlp train -f --include-package src -s ./tmp configs/san.jsonnet
+# 学習
+allennlp train -f --include-package src -s ./tmp configs/esim.jsonnet
 ```
 - 第5章 事前学習済みBERT
 ```bash
@@ -129,14 +138,28 @@ python
 
 # 学習
 allennlp train -f --include-package src -s ./tmp configs/bert-experiment.jsonnet
+# 予測
+allennlp predict --output-file output.json \
+                 --include-package src \
+                 --predictor conll_2003_predictor \
+                 --use-dataset-reader \
+                 --silent \
+                 tmp datasets/eng.testa
 ```
 - 第6章 AllenNLP で日本語を扱おう
 ```bash
-cd jp-lassifier-model
+cd jp-classifier-model
 cd datasets; ./download.sh; cd ..
 
 # 学習
 allennlp train -f --include-package src -s ./tmp configs/experiment.jsonnet
+# 評価
+allennlp predict --output-file output.json \
+                 --include-package src \
+                 --predictor text_classifier_predictor \
+                 --use-dataset-reader \
+                 --silent \
+                 tmp datasets/text/
 ```
 - 第7章 MLflow との連携
 

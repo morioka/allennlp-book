@@ -39,6 +39,8 @@ class TextClassifier(Model):
         label_logit = self.classification_layer(encoder_out)
         output = {}
 
+        output["probs"] = torch.nn.functional.softmax(label_logit, -1)
+        
         if label is not None:
             self._accuracy(label_logit, label)
             output["loss"] = self._loss(label_logit, label.long())

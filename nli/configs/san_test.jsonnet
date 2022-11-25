@@ -71,20 +71,26 @@ local num_directions = if bidirectional then 2 else 1;
             "hidden_dims": 3,
             "activations": "linear"
         },
-        "initializer": [
-            [".*linear_layers.*weight", {"type": "xavier_uniform"}],
-            [".*linear_layers.*bias", {"type": "zero"}],
-            [".*weight_ih.*", {"type": "xavier_uniform"}],
-            [".*weight_hh.*", {"type": "orthogonal"}],
-            [".*bias_ih.*", {"type": "zero"}],
-            [".*bias_hh.*", {"type": "lstm_hidden_bias"}]
-        ]
+        "initializer": {
+            "regexes": [
+                [".*linear_layers.*weight", {"type": "xavier_uniform"}],
+                [".*linear_layers.*bias", {"type": "zero"}],
+                [".*weight_ih.*", {"type": "xavier_uniform"}],
+                [".*weight_hh.*", {"type": "orthogonal"}],
+                [".*bias_ih.*", {"type": "zero"}],
+                [".*bias_hh.*", {"type": "lstm_hidden_bias"}]
+            ]
+            //"prevent_regexes": None
+        }
     },
-    "iterator": {
-        "type": "bucket",
-        "sorting_keys": [["premise", "num_tokens"],
-                         ["hypothesis", "num_tokens"]],
-        "batch_size": 5
+    "data_loader": {
+        "batch_sampler": {
+            "type": "bucket",
+            "batch_size": 5,
+            "sorting_keys": ["premise", "hypothesis"],
+            //"sorting_keys": [["premise", "num_tokens"],
+            //                 ["hypothesis", "num_tokens"]],
+        }
     },
     "trainer": {
         "optimizer": {
