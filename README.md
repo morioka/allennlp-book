@@ -24,7 +24,9 @@
 
 [@altescy](https://github.com/altescy), [@kajyuuen](https://github.com/kajyuuen)
 
-## 修正
+## 修正 
+
+by [@morioka](https://github.com/morioka)
 
 python-3.9.7 + allennlp-2.10.0 で動作するよう修正(2022-11-23現在)
 
@@ -164,3 +166,9 @@ allennlp predict --output-file output.json \
 - 第7章 MLflow との連携
 
 ※condaを利用していないので未確認
+
+結論(2022/11/29)
+
+[A Guide to Natural Language Processing With AllenNLP](https://guide.allennlp.org/)を一通りこなしてからのほうが、この本で省略されている部分がよく把握できる。
+
+以上
